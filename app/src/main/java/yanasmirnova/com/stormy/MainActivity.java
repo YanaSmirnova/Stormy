@@ -25,7 +25,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         String apiKey = "5c868a1f47e78ac86297b36dcfde4609";
-        double latitude = 37.8267;
+        double latitude = 9999; //37.8267;
         double longitude = -122.423;
 
         String forecastUrl = "https://api.forecast.io/forecast/"+apiKey+"/"+latitude+","+longitude;
@@ -45,8 +45,12 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onResponse(Response response) throws IOException {
                 try {
+                    Log.v(TAG, response.body().string());
                     if (response.isSuccessful()) {
                         Log.v(TAG, response.body().string());
+                    }
+                    else {
+                        alertUserAboutError();
                     }
                 } catch (IOException e) {
                     Log.i(TAG, "Exception caught", e);
@@ -56,6 +60,11 @@ public class MainActivity extends ActionBarActivity {
 
         Log.d(TAG, "Main UI code is running");
 
+    }
+
+    private void alertUserAboutError() {
+        AlertDialogFragment dialog = new AlertDialogFragment();
+        dialog.show(getFragmentManager(), "error_dialog");
     }
 
 }
