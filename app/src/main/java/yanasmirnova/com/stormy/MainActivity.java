@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
         double longitude = -122.423;
 
         String forecastUrl = "https://api.forecast.io/forecast/"+apiKey+"/"+latitude+","+longitude;
+        // https://api.forecast.io/forecast/5c868a1f47e78ac86297b36dcfde4609/37.8267,-122.423
 
         if (isNetworkAvailable()) {
 
@@ -87,7 +88,29 @@ public class MainActivity extends ActionBarActivity {
         JSONObject forecast = new JSONObject(jsonData);
         String timezone = forecast.getString("timezone");
         Log.i(TAG, "From JSON: " + timezone);
-        return null;
+
+        JSONObject currently = forecast.getJSONObject("currently");
+
+        String icon = currently.getString("icon");
+        long time = currently.getLong("time");
+        double temperature = currently.getDouble("temperature");
+        double humidity = currently.getDouble("humidity");
+        double precipChance = currently.getDouble("precipProbability");
+        String summary = currently.getString("summary");
+
+        Log.i(TAG, "Icon" + icon + "; Time: " + time + "; Temperature: " + temperature
+                + "; Humidity: " + humidity + "; PrecipChance: " + precipChance + "; Summary: " + summary);
+
+        CurrentWeather currentWeather = new CurrentWeather();
+
+        currentWeather.setIcon(icon);
+        currentWeather.setTime(time);
+        currentWeather.setTemperature(temperature);
+        currentWeather.setHumidity(humidity);
+        currentWeather.setPrecipChance(precipChance);
+        currentWeather.setSummary(summary);
+
+        return currentWeather;
     }
 
     private boolean isNetworkAvailable() {
