@@ -86,8 +86,8 @@ public class MainActivity extends ActionBarActivity {
 
     private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
         JSONObject forecast = new JSONObject(jsonData);
-        String timezone = forecast.getString("timezone");
-        Log.i(TAG, "From JSON: " + timezone);
+        String timeZone = forecast.getString("timezone");
+        Log.i(TAG, "TimeZone: " + timeZone);
 
         JSONObject currently = forecast.getJSONObject("currently");
 
@@ -109,6 +109,9 @@ public class MainActivity extends ActionBarActivity {
         currentWeather.setHumidity(humidity);
         currentWeather.setPrecipChance(precipChance);
         currentWeather.setSummary(summary);
+        currentWeather.setTimeZone(timeZone);
+
+        Log.d(TAG, "Formatted time: " + currentWeather.getFormattedTime());
 
         return currentWeather;
     }
