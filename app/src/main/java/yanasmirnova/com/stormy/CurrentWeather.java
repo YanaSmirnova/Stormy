@@ -88,7 +88,9 @@ public class CurrentWeather {
 
     public int getTemperature() {
         // round data to get whole number for temperature
-        return (int)Math.round(mTemperature);
+            return (int)Math.round(mTemperature);
+        // change the degree to Celsius
+        //return (int)(Math.round(mTemperature)-32)*(5/9);
     }
 
     public void setTemperature(double temperature) {
