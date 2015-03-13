@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,13 +43,16 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.summaryLabel) TextView mSummaryLabel;
     @InjectView(R.id.iconImageView) ImageView mIconImageView;
     @InjectView(R.id.refreshImageView) ImageView mRefreshImageView;
+    @InjectView(R.id.progressBar) ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ButterKnife.inject(this);
+
+        mProgressBar.setVisibility(View.INVISIBLE);
+
         final double latitude = 37.8267;
         final double longitude = -122.423;
 
@@ -70,6 +74,7 @@ public class MainActivity extends ActionBarActivity {
         // https://api.forecast.io/forecast/5c868a1f47e78ac86297b36dcfde4609/37.8267,-122.423
 
         if (isNetworkAvailable()) {
+            toggleRefresh();
 
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -80,11 +85,23 @@ public class MainActivity extends ActionBarActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
                     alertUserAboutError();
                 }
 
                 @Override
                 public void onResponse(Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
                     try {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
@@ -114,6 +131,17 @@ public class MainActivity extends ActionBarActivity {
             // TODO make it a dialog
             Toast.makeText(this, getString(R.string.network_unavailable_msg),
                     Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void toggleRefresh() {
+        if (mProgressBar.getVisibility() == View.INVISIBLE) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mRefreshImageView.setVisibility(View.INVISIBLE);
+        }
+        else {
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mRefreshImageView.setVisibility(View.VISIBLE);
         }
     }
 
