@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.precipValue) TextView mPrecipValue;
     @InjectView(R.id.summaryLabel) TextView mSummaryLabel;
     @InjectView(R.id.iconImageView) ImageView mIconImageView;
+    @InjectView(R.id.refreshImageView) ImageView mRefreshImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,18 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.inject(this);
+
+        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getForecast();
+            }
+        });
+
+        getForecast();
+    }
+
+    private void getForecast() {
 
         String apiKey = "5c868a1f47e78ac86297b36dcfde4609";
         double latitude = 37.8267;
@@ -101,8 +115,6 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(this, getString(R.string.network_unavailable_msg),
                     Toast.LENGTH_LONG).show();
         }
-        Log.d(TAG, "Main UI code is running");
-
     }
 
     private void updateDisplay() {
