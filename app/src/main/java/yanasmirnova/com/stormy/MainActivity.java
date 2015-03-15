@@ -44,8 +44,6 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.iconImageView) ImageView mIconImageView;
     @InjectView(R.id.refreshImageView) ImageView mRefreshImageView;
     @InjectView(R.id.progressBar) ProgressBar mProgressBar;
-    @InjectView(R.id.locationLabel) TextView mLocationLabel;
-    @InjectView(R.id.relativeLayout) RelativeLayout mRelativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,29 +53,25 @@ public class MainActivity extends ActionBarActivity {
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
+        // coordinates for Melbourne
+        final double latitude = -37.8175;
+        final double longitude = 144.9671;
+
         mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getForecast(getCoordinates());
+                getForecast(latitude, longitude);
             }
         });
 
-        mLocationLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleCity();
-                getForecast(getCoordinates());
-            }
-        });
-
-        getForecast(getCoordinates());
+        getForecast(latitude, longitude);
     }
 
-    private void getForecast(String coordinates) {
+    private void getForecast(double latitude, double longitude) {
 
         String apiKey = "5c868a1f47e78ac86297b36dcfde4609";
 
-        String forecastUrl = "https://api.forecast.io/forecast/"+apiKey+"/"+coordinates;
+        String forecastUrl = "https://api.forecast.io/forecast/"+apiKey+"/"+latitude+","+longitude;
         // https://api.forecast.io/forecast/5c868a1f47e78ac86297b36dcfde4609/37.8267,-122.423
 
         if (isNetworkAvailable()) {
@@ -150,30 +144,6 @@ public class MainActivity extends ActionBarActivity {
             mProgressBar.setVisibility(View.INVISIBLE);
             mRefreshImageView.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void toggleCity() {
-        if (mLocationLabel.getText().equals("Melbourne, VIC")) {
-            mLocationLabel.setText("Saint-Petersburg, RU");
-            int colorAsInt = Color.parseColor("#3079ab");
-            mRelativeLayout.setBackgroundColor(colorAsInt);
-        }
-        else {
-            mLocationLabel.setText("Melbourne, VIC");
-            int colorAsInt = Color.parseColor("#7d669e");
-            mRelativeLayout.setBackgroundColor(colorAsInt);
-        }
-    }
-
-    private String getCoordinates() {
-        String coordinates = "";
-        if (mLocationLabel.getText().equals("Melbourne, VIC")) {
-            coordinates = "-37.8175,144.9671";
-        }
-        else {
-            coordinates = "59.9332,30.3060";
-        }
-        return coordinates;
     }
 
     private void updateDisplay() {
