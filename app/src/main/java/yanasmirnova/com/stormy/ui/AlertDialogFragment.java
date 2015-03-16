@@ -1,10 +1,12 @@
-package yanasmirnova.com.stormy;
+package yanasmirnova.com.stormy.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import yanasmirnova.com.stormy.R;
 
 /**
  * Class for alertUserAboutError() method from MainActivity

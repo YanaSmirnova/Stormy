@@ -1,4 +1,4 @@
-package yanasmirnova.com.stormy;
+package yanasmirnova.com.stormy.weather;
 
 /**
  * Class to hold daily data

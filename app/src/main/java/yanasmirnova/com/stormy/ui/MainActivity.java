@@ -1,7 +1,6 @@
-package yanasmirnova.com.stormy;
+package yanasmirnova.com.stormy.ui;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +26,15 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import yanasmirnova.com.stormy.R;
+import yanasmirnova.com.stormy.weather.Current;
 
 
 public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private CurrentWeather mCurrentWeather;
+    private Current mCurrent;
 
     @InjectView(R.id.timeLabel) TextView mTimeLabel;
     @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
@@ -107,7 +107,7 @@ public class MainActivity extends ActionBarActivity {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            mCurrentWeather = getCurrentDetails(jsonData);
+                            mCurrent = getCurrentDetails(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -147,17 +147,17 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateDisplay() {
-        mTemperatureLabel.setText(mCurrentWeather.getTemperature() + "");
-        mTimeLabel.setText("At " + mCurrentWeather.getFormattedTime() + " it will be");
-        mHumidityValue.setText(mCurrentWeather.getHumidity() + "");
-        mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
-        mSummaryLabel.setText(mCurrentWeather.getSummary());
+        mTemperatureLabel.setText(mCurrent.getTemperature() + "");
+        mTimeLabel.setText("At " + mCurrent.getFormattedTime() + " it will be");
+        mHumidityValue.setText(mCurrent.getHumidity() + "");
+        mPrecipValue.setText(mCurrent.getPrecipChance() + "%");
+        mSummaryLabel.setText(mCurrent.getSummary());
 
-        Drawable drawable = getResources().getDrawable(mCurrentWeather.getIconId());
+        Drawable drawable = getResources().getDrawable(mCurrent.getIconId());
         mIconImageView.setImageDrawable(drawable);
     }
 
-    private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
+    private Current getCurrentDetails(String jsonData) throws JSONException {
         JSONObject forecast = new JSONObject(jsonData);
         String timeZone = forecast.getString("timezone");
         Log.i(TAG, "TimeZone: " + timeZone);
@@ -174,19 +174,19 @@ public class MainActivity extends ActionBarActivity {
         Log.i(TAG, "Icon" + icon + "; Time: " + time + "; Temperature: " + temperature
                 + "; Humidity: " + humidity + "; PrecipChance: " + precipChance + "; Summary: " + summary);
 
-        CurrentWeather currentWeather = new CurrentWeather();
+        Current current = new Current();
 
-        currentWeather.setIcon(icon);
-        currentWeather.setTime(time);
-        currentWeather.setTemperature(temperature);
-        currentWeather.setHumidity(humidity);
-        currentWeather.setPrecipChance(precipChance);
-        currentWeather.setSummary(summary);
-        currentWeather.setTimeZone(timeZone);
+        current.setIcon(icon);
+        current.setTime(time);
+        current.setTemperature(temperature);
+        current.setHumidity(humidity);
+        current.setPrecipChance(precipChance);
+        current.setSummary(summary);
+        current.setTimeZone(timeZone);
 
-        Log.d(TAG, "Formatted time: " + currentWeather.getFormattedTime());
+        Log.d(TAG, "Formatted time: " + current.getFormattedTime());
 
-        return currentWeather;
+        return current;
     }
 
     private boolean isNetworkAvailable() {

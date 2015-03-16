@@ -1,18 +1,30 @@
-package yanasmirnova.com.stormy;
+package yanasmirnova.com.stormy.weather;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import yanasmirnova.com.stormy.R;
+
 /**
- * Class to hold data for each hour
+ * Class for data model objects to hold the data we are getting from the Forecast service
  */
-public class Hour {
+public class Current {
     private String mIcon;
     private long mTime;
     private double mTemperature;
+    private double mHumidity;
+    private double mPrecipChance;
     private String mSummary;
     private String mTimeZone;
+
+    public String getTimeZone() {
+        return mTimeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        mTimeZone = timeZone;
+    }
 
     public String getIcon() {
         return mIcon;
@@ -63,10 +75,6 @@ public class Hour {
         return mTime;
     }
 
-    public void setTime(long time) {
-        mTime = time;
-    }
-
     public String getFormattedTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
         formatter.setTimeZone(TimeZone.getTimeZone(getTimeZone()));
@@ -76,7 +84,11 @@ public class Hour {
         return timeString;
     }
 
-    public double getTemperature() {
+    public void setTime(long time) {
+        mTime = time;
+    }
+
+    public int getTemperature() {
         // change the degree to Celsius
         double celsius = (mTemperature-32)*5/9;
         // round data to get whole number for temperature
@@ -87,19 +99,28 @@ public class Hour {
         mTemperature = temperature;
     }
 
+    public double getHumidity() {
+        return mHumidity;
+    }
+
+    public void setHumidity(double humidity) {
+        mHumidity = humidity;
+    }
+
+    public int getPrecipChance() {
+        double precipPercentage = mPrecipChance * 100;
+        return (int)Math.round(precipPercentage);
+    }
+
+    public void setPrecipChance(double precipChance) {
+        mPrecipChance = precipChance;
+    }
+
     public String getSummary() {
         return mSummary;
     }
 
     public void setSummary(String summary) {
         mSummary = summary;
-    }
-
-    public String getTimeZone() {
-        return mTimeZone;
-    }
-
-    public void setTimeZone(String timeZone) {
-        mTimeZone = timeZone;
     }
 }
