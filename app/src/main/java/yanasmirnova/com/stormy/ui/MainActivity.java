@@ -28,13 +28,14 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import yanasmirnova.com.stormy.R;
 import yanasmirnova.com.stormy.weather.Current;
+import yanasmirnova.com.stormy.weather.Forecast;
 
 
 public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private Current mCurrent;
+    private Forecast mForecast;
 
     @InjectView(R.id.timeLabel) TextView mTimeLabel;
     @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
@@ -107,7 +108,7 @@ public class MainActivity extends ActionBarActivity {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            mCurrent = getCurrentDetails(jsonData);
+                            mForecast = parseForecastDetails(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -147,14 +148,24 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateDisplay() {
-        mTemperatureLabel.setText(mCurrent.getTemperature() + "");
-        mTimeLabel.setText("At " + mCurrent.getFormattedTime() + " it will be");
-        mHumidityValue.setText(mCurrent.getHumidity() + "");
-        mPrecipValue.setText(mCurrent.getPrecipChance() + "%");
-        mSummaryLabel.setText(mCurrent.getSummary());
+        Current current = mForecast.getCurrent();
 
-        Drawable drawable = getResources().getDrawable(mCurrent.getIconId());
+        mTemperatureLabel.setText(current.getTemperature() + "");
+        mTimeLabel.setText("At " + current.getFormattedTime() + " it will be");
+        mHumidityValue.setText(current.getHumidity() + "");
+        mPrecipValue.setText(current.getPrecipChance() + "%");
+        mSummaryLabel.setText(current.getSummary());
+
+        Drawable drawable = getResources().getDrawable(current.getIconId());
         mIconImageView.setImageDrawable(drawable);
+    }
+
+    private Forecast parseForecastDetails (String jsonData) throws JSONException {
+        Forecast forecast = new Forecast();
+
+        forecast.setCurrent(getCurrentDetails(jsonData));
+
+        return forecast;
     }
 
     private Current getCurrentDetails(String jsonData) throws JSONException {
