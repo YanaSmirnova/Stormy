@@ -19,6 +19,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +29,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import yanasmirnova.com.stormy.R;
 import yanasmirnova.com.stormy.weather.Current;
+import yanasmirnova.com.stormy.weather.Day;
 import yanasmirnova.com.stormy.weather.Forecast;
+import yanasmirnova.com.stormy.weather.Hour;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -164,14 +167,44 @@ public class MainActivity extends ActionBarActivity {
         Forecast forecast = new Forecast();
 
         forecast.setCurrent(getCurrentDetails(jsonData));
+        forecast.setHourlyForecast(getHourlyForecast(jsonData));
+        forecast.setDailyForecast(getDailyForecast(jsonData));
 
         return forecast;
+    }
+
+    private Day[] getDailyForecast(String jsonData) {
+        return new Day[0];
+    }
+
+    private Hour[] getHourlyForecast(String jsonData) throws JSONException {
+        JSONObject forecast = new JSONObject(jsonData);
+        String timeZone = forecast.getString("timezone");
+        JSONObject hourly = forecast.getJSONObject("hourly");
+        JSONArray data = hourly.getJSONArray("data");
+
+        Hour[] hours = new Hour[data.length()];
+
+        for (int i = 0 ; i < data.length(); i++) {
+            JSONObject jsonHour = data.getJSONObject(i);
+
+            Hour hour = new Hour();
+            hour.setSummary(jsonHour.getString("summary"));
+            hour.setTemperature(jsonHour.getDouble("temperature"));
+            hour.setTime(jsonHour.getLong("time"));
+            hour.setTimeZone(timeZone);
+            hour.setIcon(jsonHour.getString("icon"));
+
+            hours[i] = hour;
+        }
+
+        return hours;
     }
 
     private Current getCurrentDetails(String jsonData) throws JSONException {
         JSONObject forecast = new JSONObject(jsonData);
         String timeZone = forecast.getString("timezone");
-        Log.i(TAG, "TimeZone: " + timeZone);
+        //Log.i(TAG, "TimeZone: " + timeZone);
 
         JSONObject currently = forecast.getJSONObject("currently");
 
