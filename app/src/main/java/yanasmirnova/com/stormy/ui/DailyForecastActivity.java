@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 import yanasmirnova.com.stormy.R;
 
@@ -23,6 +24,10 @@ public class DailyForecastActivity extends ListActivity {
                 "Thursday",
                 "Friday",
                 "Saturday" };
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, daysOfTheWeek);
+        setListAdapter(adapter);
     }
 
 }
