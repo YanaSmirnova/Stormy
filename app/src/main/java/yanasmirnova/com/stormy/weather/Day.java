@@ -1,5 +1,9 @@
 package yanasmirnova.com.stormy.weather;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
  * Class to hold daily data
  */
@@ -14,6 +18,10 @@ public class Day {
         return mIcon;
     }
 
+    public int getIconId() {
+        return Forecast.getIconId(mIcon);
+    }
+
     public void setIcon(String icon) {
         mIcon = icon;
     }
@@ -26,8 +34,19 @@ public class Day {
         mTime = time;
     }
 
-    public double getTemperatureMax() {
-        return mTemperatureMax;
+    public String getDayOfTheWeek() {
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
+        formatter.setTimeZone(TimeZone.getTimeZone(mTimeZone));
+        Date dateTime = new Date(getTime()*1000);
+
+        return formatter.format(dateTime);
+    }
+
+    public int getTemperatureMax() {
+        // change the degree to Celsius
+        double celsius = (mTemperatureMax-32)*5/9;
+        // round data to get whole number for temperature
+        return (int)Math.round(celsius);
     }
 
     public void setTemperatureMax(double temperatureMax) {
