@@ -1,5 +1,8 @@
 package yanasmirnova.com.stormy.weather;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -7,7 +10,7 @@ import java.util.TimeZone;
 /**
  * Class to hold daily data
  */
-public class Day {
+public class Day implements Parcelable {
     private String mIcon;
     private long mTime;
     private double mTemperatureMax;
@@ -67,5 +70,19 @@ public class Day {
 
     public void setTimeZone(String timeZone) {
         mTimeZone = timeZone;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mTime);
+        dest.writeString(mSummary);
+        dest.writeDouble(mTemperatureMax);
+        dest.writeString(mIcon);
+        dest.writeString(mTimeZone);
     }
 }

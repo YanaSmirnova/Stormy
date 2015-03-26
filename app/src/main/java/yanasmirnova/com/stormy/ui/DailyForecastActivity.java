@@ -1,6 +1,7 @@
 package yanasmirnova.com.stormy.ui;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +20,9 @@ public class DailyForecastActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_forecast);
+
+        Intent intent = getIntent();
+        mDays = intent.getParcelableArrayExtra(MainActivity.DAILY_FORECAST);
 
         DayAdapter adapter = new DayAdapter(this, mDays);
     }
