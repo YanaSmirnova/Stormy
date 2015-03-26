@@ -2,11 +2,14 @@ package yanasmirnova.com.stormy.ui;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+
+import java.util.Arrays;
 
 import yanasmirnova.com.stormy.R;
 import yanasmirnova.com.stormy.adapters.DayAdapter;
@@ -22,9 +25,11 @@ public class DailyForecastActivity extends ListActivity {
         setContentView(R.layout.activity_daily_forecast);
 
         Intent intent = getIntent();
-        mDays = intent.getParcelableArrayExtra(MainActivity.DAILY_FORECAST);
+        Parcelable[] parcelables = intent.getParcelableArrayExtra(MainActivity.DAILY_FORECAST);
+        mDays = Arrays.copyOf(parcelables, parcelables.length, Day[].class);
 
         DayAdapter adapter = new DayAdapter(this, mDays);
+        setListAdapter(adapter);
     }
 
 }

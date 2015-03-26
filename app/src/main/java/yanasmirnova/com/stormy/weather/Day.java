@@ -17,6 +17,8 @@ public class Day implements Parcelable {
     private String mSummary;
     private String mTimeZone;
 
+    public Day() { }
+
     public String getIcon() {
         return mIcon;
     }
