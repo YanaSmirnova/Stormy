@@ -1,5 +1,8 @@
 package yanasmirnova.com.stormy.weather;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -9,12 +12,14 @@ import yanasmirnova.com.stormy.R;
 /**
  * Class to hold data for each hour
  */
-public class Hour {
+public class Hour implements Parcelable {
     private String mIcon;
     private long mTime;
     private double mTemperature;
     private String mSummary;
     private String mTimeZone;
+
+    public Hour() { }
 
     public String getIcon() {
         return mIcon;
@@ -104,4 +109,38 @@ public class Hour {
     public void setTimeZone(String timeZone) {
         mTimeZone = timeZone;
     }
+
+    @Override
+    public int describeContents() {
+        return 0; // ignore
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mTime);
+        dest.writeDouble(mTemperature);
+        dest.writeString(mSummary);
+        dest.writeString(mTimeZone);
+        dest.writeString(mIcon);
+    }
+
+    private Hour(Parcel in) {
+        mTime = in.readLong();
+        mTemperature = in.readDouble();
+        mSummary = in.readString();
+        mTimeZone = in.readString();
+        mIcon = in.readString();
+    }
+
+    public static final Creator<Hour> CREATOR = new Creator<Hour>() {
+        @Override
+        public Hour createFromParcel(Parcel source) {
+            return new Hour(source);
+        }
+
+        @Override
+        public Hour[] newArray(int size) {
+            return new Hour[size];
+        }
+    };
 }
