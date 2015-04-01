@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import yanasmirnova.com.stormy.R;
-import yanasmirnova.com.stormy.weather.Day;
 import yanasmirnova.com.stormy.weather.Hour;
 
 /**
@@ -53,6 +52,13 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder
             mSummary = (TextView) itemView.findViewById(R.id.summaryLabel);
             mTemperatureLabel = (TextView) itemView.findViewById(R.id.temperatureLabel);
             mIconImageView = (ImageView) itemView.findViewById(R.id.iconImageView);
+        }
+
+        public void bindHour(Hour hour) {
+            mTimeLabel.setText(hour.getHour());
+            mSummary.setText(hour.getSummary());
+            mTemperatureLabel.setText(hour.getTemperature() + "");
+            mIconImageView.setImageResource(hour.getIconId());
         }
     }
 }
