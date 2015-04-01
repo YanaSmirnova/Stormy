@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
-
-import yanasmirnova.com.stormy.R;
 
 /**
  * Class to hold data for each hour
@@ -30,40 +27,7 @@ public class Hour implements Parcelable {
     }
 
     public int getIconId() {
-        int iconId = R.drawable.clear_day; // default icon
-
-        if (mIcon.equals("clear-day")) {
-            iconId = R.drawable.clear_day;
-        }
-        else if (mIcon.equals("clear-night")) {
-            iconId = R.drawable.clear_night;
-        }
-        else if (mIcon.equals("rain")) {
-            iconId = R.drawable.rain;
-        }
-        else if (mIcon.equals("snow")) {
-            iconId = R.drawable.snow;
-        }
-        else if (mIcon.equals("sleet")) {
-            iconId = R.drawable.sleet;
-        }
-        else if (mIcon.equals("wind")) {
-            iconId = R.drawable.wind;
-        }
-        else if (mIcon.equals("fog")) {
-            iconId = R.drawable.fog;
-        }
-        else if (mIcon.equals("cloudy")) {
-            iconId = R.drawable.cloudy;
-        }
-        else if (mIcon.equals("partly-cloudy-day")) {
-            iconId = R.drawable.partly_cloudy;
-        }
-        else if (mIcon.equals("partly-cloudy-night")) {
-            iconId = R.drawable.cloudy_night;
-        }
-
-        return iconId;
+        return Forecast.getIconId(mIcon);
     }
 
     public long getTime() {
@@ -74,16 +38,16 @@ public class Hour implements Parcelable {
         mTime = time;
     }
 
-    public String getFormattedTime() {
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
-        formatter.setTimeZone(TimeZone.getTimeZone(getTimeZone()));
+    public String getHour() {
+        SimpleDateFormat formatter = new SimpleDateFormat("h a");
+        //formatter.setTimeZone(TimeZone.getTimeZone(getTimeZone()));
         Date dateTime = new Date(getTime()*1000);
-        String timeString = formatter.format(dateTime);
+        String hourString = formatter.format(dateTime);
 
-        return timeString;
+        return hourString;
     }
 
-    public double getTemperature() {
+    public int getTemperature() {
         // change the degree to Celsius
         double celsius = (mTemperature-32)*5/9;
         // round data to get whole number for temperature
