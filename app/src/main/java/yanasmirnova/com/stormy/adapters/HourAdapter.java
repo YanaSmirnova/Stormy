@@ -20,7 +20,7 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder
 
     private Hour[] mHours;
 
-    public HourAdapter(Context context, Hour[] hours) {
+    public HourAdapter(Hour[] hours) {
         mHours = hours;
     }
 
